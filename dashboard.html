@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bem-vindo, {{ user.nome_completo }}!</h2>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5>Saldo Cofrinho</h5>
+                <h2>R$ 0.00</h2>  <!-- Atualize com soma de metas -->
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <canvas id="graficoGastos" width="400" height="200"></canvas>
+    </div>
+</div>
+<table class="table mt-4">
+    <thead><tr><th>Descrição</th><th>Valor</th><th>Categoria</th><th>Data</th></tr></thead>
+    <tbody>
+        {% for gasto in gastos %}
+        <tr><td>{{ gasto.descricao }}</td><td>R$ {{ "%.2f"|format(gasto.valor) }}</td><td>{{ gasto.categoria }}</td><td>{{ gasto.data.strftime('%d/%m/%Y') }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('graficoGastos').getContext('2d');
+new Chart(ctx, {
+    type: 'pie',
+    data: { labels: ['Alimentação', 'Transporte', 'Outros'], datasets: [{ data: [300, 100, 200], backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] }] }
+});
+</script>
+{% endblock %}

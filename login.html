@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Login/Cadastro{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 id="titulo">Login</h2>
+        <form id="form" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" name="senha" id="senha" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="toggleSenha()">👁</button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+        <button class="btn btn-link w-100 mt-2" onclick="toggleForm()">Não tem conta? Cadastre-se</button>
+        
+        <!-- Form Cadastro (escondido) -->
+        <form id="form-cadastro" method="POST" action="{{ url_for('cadastro') }}" style="display:none;">
+            <h2>Cadastro</h2>
+            <div class="mb-3"><label class="form-label">Nome Completo</label><input type="text" class="form-control" name="nome" required></div>
+            <div class="mb-3"><label class="form-label">CPF</label><input type="text" class="form-control" name="cpf" id="cpf" maxlength="14" required></div>
+            <div class="mb-3"><label class="form-label">Data de Nascimento</label><input type="date" class="form-control" name="data_nasc" required></div>
+            <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" name="email" required></div>
+            <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" name="senha" id="senha-cad" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="toggleSenhaCad()">👁</button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Cadastrar</button>
+        </form>
+    </div>
+</div>
+<script>
+function toggleForm() {
+    const form = document.getElementById('form');
+    const formCad = document.getElementById('form-cadastro');
+    const titulo = document.getElementById('titulo');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    formCad.style.display = formCad.style.display === 'none' ? 'block' : 'none';
+    titulo.textContent = form.style.display === 'block' ? 'Login' : 'Cadastro';
+}
+function toggleSenha() { document.getElementById('senha').type = document.getElementById('senha').type === 'password' ? 'text' : 'password'; }
+function toggleSenhaCad() { document.getElementById('senha-cad').type = document.getElementById('senha-cad').type === 'password' ? 'text' : 'password'; }
+// Máscara CPF
+document.getElementById('cpf').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    e.target.value = v;
+});
+</script>
+{% endblock %}
